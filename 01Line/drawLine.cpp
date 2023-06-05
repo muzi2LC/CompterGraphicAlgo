@@ -27,19 +27,35 @@ int renderLine()
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
+    int windowWidth, framebufferWidth;
+    glfwGetWindowSize(window, &windowWidth, nullptr);
+    glfwGetFramebufferSize(window, &framebufferWidth, nullptr);
+
+    float pixelWidth = static_cast<float>(windowWidth) / static_cast<float>(framebufferWidth);
 
     while (!glfwWindowShouldClose(window))
     {
         //render loop
-        glClearColor(0.0, 0.0, 0.0, 0.0);
+        glClearColor(1.0, 1.0, 1.0, 0.0);
         glClear(GL_COLOR_BUFFER_BIT);
 
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
-        glOrtho(-SCR_WIDTH/ 2, SCR_WIDTH / 2, SCR_HEIGHT / 2, -SCR_HEIGHT / 2, -1, 1);
+        
+        glOrtho(-SCR_WIDTH/ 2, SCR_WIDTH / 2, -SCR_HEIGHT / 2 , SCR_HEIGHT / 2, -1, 1);
+        //don't why bias -4
+        glMatrixMode(GL_MODELVIEW); 
+        glLoadIdentity();
+        glTranslatef(-4.0, -4.0, 0);
+
 
         drawBackGroundWhite();
-        drawPixRed(0, 0);
+        
+        for (int i = -50; i <= 50; i++)
+        {
+            drawPixRed(i, i);
+            drawPixRed(i, -i);
+        }
 
         glfwSwapBuffers(window);
         glfwPollEvents();

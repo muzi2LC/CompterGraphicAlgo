@@ -64,11 +64,15 @@ void drawPixRGB_Boundary(int x, int y, float r, float g, float b)
     glBegin(GL_POINTS);
     for (int i = 0; i < PIX_SIZE; i++)
     {
+        //glVertex2f((float)(x0 + i) + 0.5, float(y0 ) + 0.5);
+        //glVertex2f((float)(x0 + i) + 0.5, float(y0 + PIX_SIZE - 1) + 0.5);
         glVertex2i(x0 + i, y0);
         glVertex2i(x0 + i, y0+PIX_SIZE-1);
     }
     for (int i = 1; i < PIX_SIZE - 1; i++)
     {
+        //glVertex2f((float)(x0) + 0.5, float(y0 + i) + 0.5);
+        //glVertex2f((float)(x0+PIX_SIZE-1) + 0.5, float(y0 + i) + 0.5);
         glVertex2i(x0 , y0+i);
         glVertex2i(x0 +PIX_SIZE-1, y0 + i);
     }
@@ -90,6 +94,7 @@ void drawPixRGB(int x, int y, float r, float g, float b)
     {
         for (int j = 0; j < PIX_SIZE; j++)
         {
+            //glVertex2f((float)(x0 + i) + 0.5, float(y0 + j) + 0.5);
             glVertex2i(x0 + i, y0 + j);
         }
     }
@@ -110,9 +115,9 @@ void drawPixBlack(int x, int y)
 
 void drawBackGroundWhite()
 {
-    for (int x = 0 - MAX_PIX / 2; x < MAX_PIX / 2; x++)
+    for (int x = MIN_PIX; x <= MAX_PIX ; x++)
     {
-        for (int y = 0 - MAX_PIX / 2; y < MAX_PIX / 2; y++)
+        for (int y = MIN_PIX; y <= MAX_PIX ; y++)
         {
             drawPixRGB(x, y, 1.0, 1.0, 1.0);
             drawPixBlack_Boundary(x, y);
