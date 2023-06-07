@@ -1,6 +1,5 @@
 
 SET(LINE_SRC    
-    global.h  
 	drawPix.h     drawPix.cpp
 	drawLine.h    drawLine.cpp
 	main.cpp)

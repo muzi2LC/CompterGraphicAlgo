@@ -1,11 +1,14 @@
 #include"drawLine.h"
-#include"global.h"
 #include"drawPix.h"
 #include<glad/glad.h>
 #include<glfw/glfw3.h>
 #include<iostream>
+#include<vector>
 
-
+const int SCR_WIDTH = 808;
+const int SCR_HEIGHT = 808;
+const int PIX_SIZE = 8;
+void MidPoint_algo(int x0, int y0, int x1, int y1);
 int renderLine()
 {
 
@@ -33,6 +36,7 @@ int renderLine()
 
     float pixelWidth = static_cast<float>(windowWidth) / static_cast<float>(framebufferWidth);
 
+
     while (!glfwWindowShouldClose(window))
     {
         //render loop
@@ -42,20 +46,25 @@ int renderLine()
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
         
-        glOrtho(-SCR_WIDTH/ 2, SCR_WIDTH / 2, -SCR_HEIGHT / 2 , SCR_HEIGHT / 2, -1, 1);
-        //don't why bias -4
-        glMatrixMode(GL_MODELVIEW); 
-        glLoadIdentity();
-        glTranslatef(-4.0, -4.0, 0);
+        glOrtho(0, SCR_WIDTH , 0,SCR_HEIGHT , -1, 1);
 
-
-        drawBackGroundWhite();
-        
-        for (int i = -50; i <= 50; i++)
+        Pix::init(PIX_SIZE, SCR_WIDTH);
+        for (int i = 0; i < SCR_WIDTH/PIX_SIZE; i++)
         {
-            drawPixRed(i, i);
-            drawPixRed(i, -i);
+            for (int j = 0; j < SCR_HEIGHT/PIX_SIZE; j++)
+            {
+                Pix pix(i, j);
+                pix.drawWhite();
+                pix.drawBlack_Boundary();
+            }
         }
+        for (int i = 0; i < SCR_WIDTH / PIX_SIZE; i++)
+        {
+            Pix pix(i, i);
+            pix.drawRed();
+        }
+        MidPoint_algo(1,2, 7, 6);
+
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -66,4 +75,27 @@ int renderLine()
     glfwTerminate();
 
     return 0;
+}
+double func(double x, double y, double x0, double y0, double x1, double y1)
+{
+    return (y0 - y1) * x + (x1 - x0) * y + x0 * y1 - x1 * y0;
+}
+void MidPoint_algo(int x0, int y0, int x1, int y1)
+{
+    double d = func(x0 + 1, y0 + 0.5, x0, y0, x1, y1);
+    int y = y0;
+    for (int x = x0; x <= x1; x++)
+    {
+        Pix pix(x, y);
+        pix.drawRed();
+        if (d < 0)
+        {
+            y = y + 1;
+            d = d + (x1 - x0) + (y0 - y1);
+        }
+        else
+        {
+            d = d + (y0 - y1);
+        }
+    }
 }
